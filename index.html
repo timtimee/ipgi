@@ -6,7 +6,8 @@
 <title>IPGI - Event and Jackpot Update</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
-<style>
+
+  <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
 
 body{
@@ -16,7 +17,30 @@ overflow-x:hidden;
 overflow-y:auto;
 }
 
-/* GOLD GLOW */
+/* LANTERNS */
+.lantern{
+position:fixed;
+top:-100px;
+font-size:40px;
+animation:floatLantern 15s linear infinite;
+opacity:.7;
+pointer-events:none;
+}
+
+@keyframes floatLantern{
+0%{transform:translateY(0);}
+100%{transform:translateY(120vh);}
+}
+
+/* FIREWORK GLOW */
+@keyframes fireGlow{
+0%{box-shadow:0 0 0 rgba(255,215,0,0);}
+50%{box-shadow:0 0 50px rgba(255,215,0,.6);}
+100%{box-shadow:0 0 0 rgba(255,215,0,0);}
+}
+
+.hero{animation:fireGlow 4s infinite;}
+
 @keyframes goldPulse{
 0%{text-shadow:0 0 6px rgba(255,215,0,0.5);}
 50%{text-shadow:0 0 25px rgba(255,215,0,1);}
@@ -38,39 +62,15 @@ border-bottom:2px solid gold;
 z-index:1000;
 }
 
-.lang-switch button{
-border:1px solid gold;
-color:gold;
-background:transparent;
-border-radius:50%;
-padding:6px 10px;
-font-size:18px;
-transition:.3s;
-}
-
-.lang-switch button.active{
-background:gold;
-color:#7a0000;
-transform:scale(1.1);
-}
-
+/* SAME VIP STYLING BELOW */
 .hero{
 padding:130px 10% 80px;
 text-align:center;
 background:linear-gradient(to bottom,rgba(0,0,0,0.3),rgba(0,0,0,0.6));
 }
 
-.hero h1{
-font-size:3rem;
-color:gold;
-letter-spacing:2px;
-margin-bottom:15px;
-}
-
-.hero h2{
-color:#ffd700;
-margin-bottom:20px;
-}
+.hero h1{font-size:3rem;color:gold;margin-bottom:15px;}
+.hero h2{color:#ffd700;margin-bottom:20px;}
 
 .horse-badge{
 display:inline-block;
@@ -93,27 +93,10 @@ padding:45px;
 box-shadow:0 0 40px rgba(255,215,0,0.3);
 }
 
-.highlight{color:gold;font-weight:700;}
-
 .jackpot-section{
 padding:100px 10%;
 text-align:center;
 background:#2b0000;
-}
-
-.toggle-buttons button{
-border:2px solid gold;
-background:transparent;
-color:gold;
-padding:12px 30px;
-border-radius:30px;
-transition:.3s;
-}
-
-.toggle-buttons button.active{
-background:gold;
-color:#7a0000;
-font-weight:700;
 }
 
 .game{
@@ -125,41 +108,11 @@ margin-bottom:40px;
 box-shadow:0 0 30px rgba(255,215,0,0.3);
 }
 
-.level{
-background:rgba(120,0,0,0.5);
-border:1px solid gold;
-border-radius:15px;
-padding:25px;
-}
-
-.amount{
-font-size:2.2rem;
-font-weight:800;
-color:gold;
-}
-
-footer{
-padding:40px;
-text-align:center;
-background:#1a0000;
-color:gold;
-border-top:2px solid gold;
-}
-
-.reveal{
-opacity:0;
-transform:translateY(60px);
-transition:all .8s ease;
-}
-.reveal.active{
-opacity:1;
-transform:translateY(0);
-}
-
 @media(max-width:768px){
 .levels{flex-direction:column;}
 .hero h1{font-size:2.2rem;}
 .event-box{padding:25px;}
+.lantern{font-size:28px;}
 }
 </style>
 
@@ -173,6 +126,10 @@ transform:translateY(0);
 <img src="https://indo.com.au/wp-content/uploads/2024/03/Group-3-1.png">
 </a>
 </div>
+
+<div class="lantern" style="left:10%;animation-duration:18s;">🏮</div>
+<div class="lantern" style="left:40%;animation-duration:22s;">🏮</div>
+<div class="lantern" style="left:70%;animation-duration:20s;">🏮</div>
 
 <div class="lang-switch">
 <button onclick="setLanguage('en',this)">🇬🇧</button>
