@@ -6,37 +6,25 @@
 <title>IPGI - Event and Jackpot Update</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
-
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
 
 body{
-background:linear-gradient(135deg,#2b0000,#7a0000,#2b0000);
-background-size:400% 400%;
-animation:bgMove 15s ease infinite;
-color:#fff8e7;
+background:radial-gradient(circle at top,#8b0000,#3a0000 60%,#1a0000);
+color:#fff5e6;
 overflow-x:hidden;
 overflow-y:auto;
 }
 
-@keyframes bgMove{
-0%{background-position:0% 50%;}
-50%{background-position:100% 50%;}
-100%{background-position:0% 50%;}
-}
-
 /* GOLD GLOW */
 @keyframes goldPulse{
-0%{text-shadow:0 0 5px rgba(255,215,0,0.5);}
+0%{text-shadow:0 0 6px rgba(255,215,0,0.5);}
 50%{text-shadow:0 0 25px rgba(255,215,0,1);}
-100%{text-shadow:0 0 5px rgba(255,215,0,0.5);}
+100%{text-shadow:0 0 6px rgba(255,215,0,0.5);}
 }
 
-.amount.glow{
-animation:goldPulse 2s infinite ease-in-out;
-}
+.amount.glow{animation:goldPulse 2.2s infinite ease-in-out;}
 
-/* NAVBAR */
 .navbar{
 position:fixed;
 top:0;
@@ -45,25 +33,19 @@ width:100%;
 padding:14px 8%;
 display:flex;
 align-items:center;
-background:rgba(120,0,0,0.9);
-backdrop-filter:blur(10px);
+background:rgba(120,0,0,0.95);
 border-bottom:2px solid gold;
 z-index:1000;
 }
 
-.logo img{height:42px;}
-
-.lang-switch{margin-left:auto;display:flex;gap:8px;}
-
 .lang-switch button{
-background:transparent;
 border:1px solid gold;
+color:gold;
+background:transparent;
 border-radius:50%;
 padding:6px 10px;
-cursor:pointer;
 font-size:18px;
-transition:0.3s;
-color:gold;
+transition:.3s;
 }
 
 .lang-switch button.active{
@@ -72,81 +54,60 @@ color:#7a0000;
 transform:scale(1.1);
 }
 
-.lang-switch button:hover{
-background:gold;
-color:#7a0000;
-}
-
-/* HERO */
 .hero{
 padding:130px 10% 80px;
 text-align:center;
-background:linear-gradient(180deg,rgba(0,0,0,0.3),rgba(0,0,0,0.6));
-position:relative;
+background:linear-gradient(to bottom,rgba(0,0,0,0.3),rgba(0,0,0,0.6));
 }
 
 .hero h1{
-font-size:3.2rem;
+font-size:3rem;
 color:gold;
-margin-bottom:10px;
 letter-spacing:2px;
+margin-bottom:15px;
 }
 
 .hero h2{
 color:#ffd700;
-margin-bottom:25px;
+margin-bottom:20px;
 }
 
-/* HORSE BADGE */
 .horse-badge{
-font-size:1.1rem;
-color:#fff;
-margin-bottom:25px;
+display:inline-block;
 background:linear-gradient(45deg,gold,#ffcc00);
 color:#7a0000;
-padding:8px 22px;
-display:inline-block;
+padding:8px 24px;
 border-radius:30px;
 font-weight:700;
+margin-bottom:25px;
 box-shadow:0 0 20px rgba(255,215,0,0.5);
 }
 
-/* EVENT BOX */
 .event-box{
 max-width:900px;
 margin:auto;
-background:rgba(0,0,0,0.5);
+background:rgba(0,0,0,0.55);
 border:2px solid gold;
 border-radius:20px;
-padding:50px;
-box-shadow:0 0 40px rgba(255,215,0,0.4);
+padding:45px;
+box-shadow:0 0 40px rgba(255,215,0,0.3);
 }
 
-.prize{margin:12px 0;font-size:1.15rem;}
 .highlight{color:gold;font-weight:700;}
-.schedule{margin-top:25px;line-height:1.8;opacity:0.9;}
-.cta{margin-top:35px;font-size:1.3rem;color:gold;font-weight:700;}
 
-/* JACKPOT */
 .jackpot-section{
 padding:100px 10%;
 text-align:center;
-background:linear-gradient(180deg,#4d0000,#2b0000);
-}
-
-.toggle-buttons{
-margin:30px 0 60px;
+background:#2b0000;
 }
 
 .toggle-buttons button{
-padding:12px 30px;
-margin:0 10px;
-border-radius:30px;
 border:2px solid gold;
 background:transparent;
 color:gold;
-cursor:pointer;
-transition:0.3s;
+padding:12px 30px;
+border-radius:30px;
+transition:.3s;
 }
 
 .toggle-buttons button.active{
@@ -164,50 +125,32 @@ margin-bottom:40px;
 box-shadow:0 0 30px rgba(255,215,0,0.3);
 }
 
-.levels{
-display:flex;
-gap:20px;
-flex-wrap:wrap;
-}
-
 .level{
-flex:1;
-min-width:250px;
 background:rgba(120,0,0,0.5);
-padding:25px;
-border-radius:15px;
 border:1px solid gold;
+border-radius:15px;
+padding:25px;
 }
 
 .amount{
 font-size:2.2rem;
 font-weight:800;
-margin:15px 0;
 color:gold;
-}
-
-.date{
-font-size:0.9rem;
-color:#ffdf80;
-margin-top:8px;
 }
 
 footer{
 padding:40px;
 text-align:center;
+background:#1a0000;
 color:gold;
-background:#2b0000;
-font-size:0.9rem;
 border-top:2px solid gold;
 }
 
-/* REVEAL */
 .reveal{
 opacity:0;
 transform:translateY(60px);
-transition:all 0.8s ease;
+transition:all .8s ease;
 }
-
 .reveal.active{
 opacity:1;
 transform:translateY(0);
@@ -216,9 +159,10 @@ transform:translateY(0);
 @media(max-width:768px){
 .levels{flex-direction:column;}
 .hero h1{font-size:2.2rem;}
-.event-box{padding:28px;}
+.event-box{padding:25px;}
 }
 </style>
+
 </head>
 
 <body>
