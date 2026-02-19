@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IPGI - Event and Jackpot Update</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{
+background:#0b0f1a;
+color:white;
+overflow-x:hidden;
+overflow-y:auto;
+}
+
+/* Jackpot Glow Pulse */
+@keyframes glowPulse {
+0% { text-shadow: 0 0 5px rgba(255,215,0,0.4); }
+50% { text-shadow: 0 0 18px rgba(255,215,0,0.9); }
+100% { text-shadow: 0 0 5px rgba(255,215,0,0.4); }
+}
+
+.amount.glow {
+animation: glowPulse 2.2s infinite ease-in-out;
+}
+
+/* NAVBAR */
+.navbar{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+padding:12px 8%;
+display:flex;
+align-items:center;
+background:rgba(0,0,0,0.85);
+backdrop-filter:blur(10px);
+border-bottom:1px solid rgba(255,215,0,0.2);
+z-index:1000;
+}
+
+.logo img{height:42px;}
+
+.lang-switch{margin-left:auto;display:flex;gap:8px;}
+
+.lang-switch button{
+background:transparent;
+border:1px solid gold;
+border-radius:50%;
+padding:6px 10px;
+cursor:pointer;
+font-size:18px;
+transition:0.3s;
+}
+
+.lang-switch button.active{
+background:gold;
+color:black;
+transform:scale(1.1);
+}
+
+.lang-switch button:hover{background:gold;}
+
+/* HERO */
+.hero{
+padding:120px 10% 80px;
+text-align:center;
+background:linear-gradient(135deg,#111827,#1f2937);
+transition:opacity 0.3s ease;
+}
+
+.hero.fade{opacity:0;}
+
+.hero h1{font-size:3rem;color:#ffd700;margin-bottom:20px;}
+.hero h2{color:#00ffcc;margin-bottom:30px;}
+
+.event-box{
+max-width:900px;
+margin:auto;
+background:rgba(255,255,255,0.03);
+border:1px solid rgba(230,193,90,0.25);
+border-radius:18px;
+padding:50px;
+backdrop-filter:blur(20px);
+box-shadow:0 20px 60px rgba(0,0,0,0.6);
+}
+
+.prize{margin:12px 0;font-size:1.15rem;}
+.highlight{color:#7fffd4;font-weight:600;}
+.schedule{margin-top:25px;line-height:1.8;opacity:0.85;}
+.cta{margin-top:35px;font-size:1.25rem;color:#e6c15a;font-weight:600;}
+
+/* JACKPOT */
+.jackpot-section{
+padding:100px 10%;
+text-align:center;
+background:#141a2e;
+}
+
+.toggle-buttons{margin:30px 0 60px;}
+
+.toggle-buttons button{
+padding:12px 30px;
+margin:0 10px;
+border-radius:30px;
+border:1px solid gold;
+background:transparent;
+color:gold;
+cursor:pointer;
+transition:0.3s;
+}
+
+.toggle-buttons button.active{
+background:gold;
+color:black;
+font-weight:600;
+}
+
+.game{
+background:rgba(255,255,255,0.05);
+border:1px solid rgba(255,215,0,0.3);
+border-radius:20px;
+padding:40px;
+margin-bottom:40px;
+box-shadow:0 0 25px rgba(255,215,0,0.1);
+backdrop-filter:blur(10px);
+}
+
+.levels{display:flex;gap:20px;flex-wrap:wrap;}
+.level{flex:1;min-width:250px;background:rgba(0,0,0,0.5);padding:25px;border-radius:15px;}
+.amount{font-size:2rem;font-weight:700;margin:15px 0;color:#ffd700;}
+.date{font-size:0.9rem;color:#aaa;margin-top:8px;}
+
+footer{
+padding:40px;
+text-align:center;
+color:gold;
+background:#0b0f1a;
+font-size:0.9rem;
+}
+
+/* SCROLL REVEAL */
+.reveal{
+opacity:0;
+transform:translateY(60px);
+transition:all 0.8s ease;
+}
+
+.reveal.active{
+opacity:1;
+transform:translateY(0);
+}
+
+@media(max-width:768px){
+.levels{flex-direction:column;}
+.hero h1{font-size:2.2rem;}
+.event-box{padding:28px;}
+}
+</style>
+</head>
+
+<body>
+
+<nav class="navbar">
+<div class="logo">
+<a href="https://www.indo.com.au" target="_blank">
+<img src="https://indo.com.au/wp-content/uploads/2024/03/Group-3-1.png">
+</a>
+</div>
+
+<div class="lang-switch">
+<button onclick="setLanguage('en',this)">🇬🇧</button>
+<button onclick="setLanguage('th',this)">🇹🇭</button>
+<button onclick="setLanguage('zh',this)">🇨🇳</button>
+<button onclick="setLanguage('lo',this)">🇱🇦</button>
+<button onclick="setLanguage('ko',this)">🇰🇷</button>
+</div>
+</nav>
+
+<section class="hero reveal" id="hero">
+<h1 id="event-title"></h1>
+<h2 id="event-subtitle"></h2>
+
+<div class="event-box">
+<div class="prize" id="prize1"></div>
+<div class="prize" id="prize2"></div>
+<div class="prize" id="prize3"></div>
+<div class="schedule" id="schedule"></div>
+<div style="margin-top:25px;opacity:0.85;" id="location"></div>
+<div class="cta" id="cta-text"></div>
+</div>
+</section>
+
+<section class="jackpot-section reveal">
+<h1 id="jackpot-title"></h1>
+
+<div class="toggle-buttons">
+<button id="btn-current" class="active">Current Jackpot</button>
+<button id="btn-last">Last Jackpot Hits</button>
+</div>
+
+<div id="jackpot-container"></div>
+</section>
+
+<footer>© 2026 IPGI Laos. All rights reserved.</footer>
+
+<script>
+
+/* ===== TRANSLATIONS ===== */
+
+const translations = {
+  en:{
+    title:"Happy Hour Jackpot",
+    subtitle:"On-Going Event",
+    prize1:"1st Prize - <span class='highlight'>15,000 THB</span> (min bet: 5,000 THB)",
+    prize2:"2nd Prize - <span class='highlight'>10,000 THB</span> (min bet: 3,000 THB)",
+    prize3:"3rd Prize - <span class='highlight'>5,000 THB</span> (min bet: 1,000 THB)",
+    schedule:"<strong>Starts every Friday</strong><br>1st Session: 18:01H - 18:45H<br>2nd Session: 19:01H - 19:45H",
+    location:"Play at <strong>First Floor – Zone C</strong><br>Inspired Sabre Hydra & Alfastreet Wiky Roulette Machines",
+    cta:"Play and chance to win a Jackpot!"
+  },
+  th:{
+    title:"แฮปปี้อาวร์แจ็คพอต",
+    subtitle:"กิจกรรมกำลังดำเนินอยู่",
+    prize1:"รางวัลที่ 1 - <span class='highlight'>15,000 บาท</span> (เดิมพันขั้นต่ำ: 5,000 บาท)",
+    prize2:"รางวัลที่ 2 - <span class='highlight'>10,000 บาท</span> (เดิมพันขั้นต่ำ: 3,000 บาท)",
+    prize3:"รางวัลที่ 3 - <span class='highlight'>5,000 บาท</span> (เดิมพันขั้นต่ำ: 1,000 บาท)",
+    schedule:"<strong>เริ่มทุกวันศุกร์</strong><br>รอบที่ 1: 18:01 - 18:45<br>รอบที่ 2: 19:01 - 19:45",
+    location:"เล่นที่ <strong>ชั้น 1 – โซน C</strong><br>Inspired Sabre Hydra & Alfastreet Wiky Roulette Machines",
+    cta:"ร่วมสนุกและลุ้นรับแจ็คพอต!"
+  },
+  zh:{
+    title:"欢乐时光累积大奖",
+    subtitle:"正在进行中",
+    prize1:"一等奖 - <span class='highlight'>15,000 泰铢</span>（最低投注：5,000 泰铢）",
+    prize2:"二等奖 - <span class='highlight'>10,000 泰铢</span>（最低投注：3,000 泰铢）",
+    prize3:"三等奖 - <span class='highlight'>5,000 泰铢</span>（最低投注：1,000 泰铢）",
+    schedule:"<strong>每周五开始</strong><br>第一场：18:01 - 18:45<br>第二场：19:01 - 19:45",
+    location:"地点：<strong>一楼 C 区</strong><br>Inspired Sabre Hydra & Alfastreet Wiky Roulette Machines",
+    cta:"参与游戏，赢取大奖！"
+  },
+  lo:{
+    title:"ແຈັກພອດ Happy Hour",
+    subtitle:"ກຳລັງຈັດກິດຈະກຳ",
+    prize1:"ລາງວັນທີ 1 - <span class='highlight'>15,000 ບາດ</span> (ເບດຂັ້ນຕ່ຳ: 5,000 ບາດ)",
+    prize2:"ລາງວັນທີ 2 - <span class='highlight'>10,000 ບາດ</span> (ເບດຂັ້ນຕ່ຳ: 3,000 ບາດ)",
+    prize3:"ລາງວັນທີ 3 - <span class='highlight'>5,000 ບາດ</span> (ເບດຂັ້ນຕ່ຳ: 1,000 ບາດ)",
+    schedule:"<strong>ເລີ່ມທຸກວັນສຸກ</strong><br>ຮອບ 1: 18:01 - 18:45<br>ຮອບ 2: 19:01 - 19:45",
+    location:"ຫຼິ້ນທີ່ <strong>ຊັ້ນ 1 – ໂຊນ C</strong><br>Inspired Sabre Hydra & Alfastreet Wiky Roulette Machines",
+    cta:"ຫຼິ້ນເພື່ອລຸ້ນແຈັກພອດ!"
+  },
+  ko:{
+    title:"해피 아워 잭팟",
+    subtitle:"진행 중 이벤트",
+    prize1:"1등 - <span class='highlight'>15,000 바트</span> (최소 베팅: 5,000 바트)",
+    prize2:"2등 - <span class='highlight'>10,000 바트</span> (최소 베팅: 3,000 바트)",
+    prize3:"3등 - <span class='highlight'>5,000 바트</span> (최소 베팅: 1,000 바트)",
+    schedule:"<strong>매주 금요일 시작</strong><br>1차: 18:01 - 18:45<br>2차: 19:01 - 19:45",
+    location:"플레이 장소: <strong>1층 – C 구역</strong><br>Inspired Sabre Hydra & Alfastreet Wiky Roulette Machines",
+    cta:"플레이하고 잭팟을 잡으세요!"
+  }
+};
+
+/* LANGUAGE */
+function setLanguage(lang,btn){
+const hero=document.getElementById("hero");
+hero.classList.add("fade");
+setTimeout(()=>{
+const t=translations[lang]||translations.en;
+document.getElementById("event-title").innerHTML=t.title;
+document.getElementById("event-subtitle").innerHTML=t.subtitle;
+document.getElementById("prize1").innerHTML=t.prize1;
+document.getElementById("prize2").innerHTML=t.prize2;
+document.getElementById("prize3").innerHTML=t.prize3;
+document.getElementById("schedule").innerHTML=t.schedule;
+document.getElementById("location").innerHTML=t.location;
+document.getElementById("cta-text").innerHTML=t.cta;
+hero.classList.remove("fade");
+},200);
+document.querySelectorAll(".lang-switch button").forEach(b=>b.classList.remove("active"));
+if(btn) btn.classList.add("active");
+}
+setLanguage("en",document.querySelector(".lang-switch button"));
+
+/* JACKPOT */
+let jackpotData={},currentMode="current";
+
+fetch("data.json")
+.then(res=>res.json())
+.then(data=>{
+jackpotData=data;
+currentMode=data.mode||"current";
+setActiveButton();
+renderJackpot();
+});
+
+document.getElementById("btn-current").onclick=()=>{
+currentMode="current";
+setActiveButton();
+renderJackpot();
+};
+document.getElementById("btn-last").onclick=()=>{
+currentMode="last";
+setActiveButton();
+renderJackpot();
+};
+
+function setActiveButton(){
+const btnCurrent=document.getElementById("btn-current");
+const btnLast=document.getElementById("btn-last");
+const title=document.getElementById("jackpot-title");
+
+btnCurrent.classList.toggle("active",currentMode==="current");
+btnLast.classList.toggle("active",currentMode==="last");
+
+if(currentMode==="current"){
+const d=new Date();
+const day=String(d.getDate()).padStart(2,'0');
+const months=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const month=months[d.getMonth()];
+const year=String(d.getFullYear()).slice(-2);
+title.textContent=`Current Jackpot as of ${day}-${month}-${year}`;
+}else{
+title.textContent="Last Jackpot Hits";
+}
+}
+
+function animateCounter(el,target){
+let duration=1500,startTime=null;
+function update(t){
+if(!startTime)startTime=t;
+let progress=t-startTime;
+let percent=Math.min(progress/duration,1);
+let value=Math.floor(percent*target);
+el.textContent=value.toLocaleString()+" THB";
+if(progress<duration){requestAnimationFrame(update);}
+else{el.textContent=target.toLocaleString()+" THB";}
+}
+requestAnimationFrame(update);
+}
+
+
+function renderJackpot(){
+
+var container=document.getElementById("jackpot-container");
+container.innerHTML="";
+var games=jackpotData[currentMode];
+if(!games){ return; }
+
+var keys=Object.keys(games);
+
+for(var i=0;i<keys.length;i++){
+
+var key=keys[i];
+var game=games[key];
+
+var gameDiv=document.createElement("div");
+gameDiv.className="game reveal";
+
+gameDiv.innerHTML =
+"<h2>"+formatGameName(key)+"</h2>"+
+"<div class='levels'>"+
+"<div class='level'>"+
+"<strong>Level 1</strong>"+
+"<div class='amount' data-value='"+game.level1+"'>0 THB</div>"+
+"<div class='date'>"+
+(currentMode==="current"
+? "Updated: "+(game.time||"--:--")
+: "Date: "+(game.level1_date||"--"))+
+"</div>"+
+"</div>"+
+"<div class='level'>"+
+"<strong>Level 2</strong>"+
+"<div class='amount' data-value='"+game.level2+"'>0 THB</div>"+
+"<div class='date'>"+
+(currentMode==="current"
+? "Updated: "+(game.time||"--:--")
+: "Date: "+(game.level2_date||"--"))+
+"</div>"+
+"</div>"+
+"</div>";
+
+container.appendChild(gameDiv);
+}
+
+/* SAFE STAGGER */
+var cards=document.querySelectorAll(".game");
+for(var j=0;j<cards.length;j++){
+cards[j].style.transitionDelay=(j*0.2)+"s";
+}
+
+/* COUNTER + GLOW */
+if(currentMode==="current"){
+
+var amounts=document.querySelectorAll(".amount");
+
+for(var k=0;k<amounts.length;k++){
+
+var el=amounts[k];
+var target=parseInt(el.getAttribute("data-value"));
+
+if(!isNaN(target)){
+animateCounter(el,target);
+
+(function(element){
+setTimeout(function(){
+element.classList.add("glow");
+},1500);
+})(el);
+}
+}
+
+}else{
+
+var amountsStatic=document.querySelectorAll(".amount");
+
+for(var x=0;x<amountsStatic.length;x++){
+var el2=amountsStatic[x];
+var target2=parseInt(el2.getAttribute("data-value"));
+el2.textContent=Number(target2).toLocaleString()+" THB";
+el2.classList.remove("glow");
+}
+
+}
+
+revealOnScroll();
+}
+
+/* SCROLL EFFECT */
+function revealOnScroll(){
+const reveals=document.querySelectorAll(".reveal");
+reveals.forEach(el=>{
+const windowHeight=window.innerHeight;
+const elementTop=el.getBoundingClientRect().top;
+if(elementTop < windowHeight - 100){
+el.classList.add("active");
+}
+});
+}
+window.addEventListener("scroll",revealOnScroll);
+window.addEventListener("load",revealOnScroll);
+
+function formatGameName(key){
+return key.replace(/([A-Z])/g," $1").replace(/^./,s=>s.toUpperCase());
+}
+
+</script>
+</body>
+</html>
