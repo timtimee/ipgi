@@ -23,22 +23,6 @@ color:#fff5e6;
 overflow-x:hidden;
 }
 
-/* ===== LANTERNS (NON-BREAKING) ===== */
-.lantern{
-position:fixed;
-top:-120px;
-font-size:38px;
-opacity:.6;
-pointer-events:none;
-z-index:1;
-animation:floatLantern linear infinite;
-}
-
-@keyframes floatLantern{
-0%{transform:translateY(0);}
-100%{transform:translateY(130vh);}
-}
-
 /* ===== NAVBAR ===== */
 .navbar{
 position:fixed;
@@ -372,10 +356,6 @@ font-size:26px;
 <img src="https://indo.com.au/wp-content/uploads/2024/03/Group-3-1.png">
 </a>
 </div>
-
-<div class="lantern" style="left:10%;animation-duration:18s;">🏮</div>
-<div class="lantern" style="left:35%;animation-duration:22s;">🏮</div>
-<div class="lantern" style="left:70%;animation-duration:20s;">🏮</div>
 
 <div class="lang-switch">
 <button onclick="setLanguage('en',this)">🇬🇧</button>
