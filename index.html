@@ -399,7 +399,21 @@ font-size:26px;
 
   <h1 id="event-title"></h1>
   <h2 id="event-subtitle"></h2>
+  <div class="horse-badge" id="event-pill"></div>
 
+  <div class="event-box">
+    <!-- image area (auto hides if empty) -->
+    <div class="event-media" id="evtMediaWrap">
+      <img class="event-img" id="evtImage" alt="">
+    </div>
+
+    <div class="prize" id="prize1"></div>
+    <div class="prize" id="prize2"></div>
+    <div class="prize" id="prize3"></div>
+    <div class="schedule" id="schedule"></div>
+    <div style="margin-top:25px;opacity:0.85;" id="location"></div>
+    <div class="cta" id="cta-text"></div>
+  </div>
 </section>
 
 <section class="jackpot-section reveal">
@@ -411,14 +425,6 @@ font-size:26px;
 </div>
 
 <div id="jackpot-container"></div>
-
-<div class="event-box">
-<!-- image area (auto hides if empty) -->
-<div class="event-media" id="evtMediaWrap">
-<img class="event-img" id="evtImage" alt="">
-</div>
-
-  
 </section>
 
 <footer>© 2026 IPGI Laos. All rights reserved.</footer>
@@ -429,7 +435,6 @@ font-size:26px;
    ========================================================= */
 
 const events = [
-  
   {
     id: "early_bird_donut",
     // Put your donut image here (save your photo as this file in your project):
