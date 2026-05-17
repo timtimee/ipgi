@@ -1035,3 +1035,187 @@ html[lang="ja"] .mini-table th {
     font-size: .76rem;
   }
 }
+
+/* v12 promotion coming soon + custom language dropdown flags */
+.coming-soon-card {
+  width: min(760px, 100%);
+  margin: 0 auto;
+  padding: clamp(28px, 5vw, 52px);
+  text-align: center;
+}
+
+.coming-icon {
+  width: 72px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 2rem;
+  background: linear-gradient(145deg, #ffe49f, #d7a12a);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.45), 0 18px 40px rgba(183,122,6,.22);
+}
+
+.coming-soon-card p {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.language-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.lang-select-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 42px;
+  min-width: 104px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.82);
+  color: var(--ink);
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 10px 28px rgba(160,107,0,.08);
+}
+
+.lang-caret {
+  color: var(--muted);
+  margin-left: auto;
+}
+
+.lang-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 80;
+  min-width: 136px;
+  padding: 7px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.96);
+  box-shadow: 0 18px 48px rgba(80,50,0,.18);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  display: none;
+}
+
+.language-switch.open .lang-menu {
+  display: grid;
+  gap: 4px;
+}
+
+.lang-option {
+  border: none;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 10px;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--ink);
+  font-weight: 800;
+  cursor: pointer;
+  text-align: left;
+}
+
+.lang-option:hover,
+.lang-option.active {
+  background: var(--gold-soft);
+}
+
+.flag-icon {
+  width: 24px;
+  height: 16px;
+  flex: 0 0 auto;
+  display: inline-block;
+  border-radius: 3px;
+  overflow: hidden;
+  border: 1px solid rgba(90,60,0,.18);
+  box-shadow: 0 1px 2px rgba(0,0,0,.08);
+  background: #ddd;
+}
+
+/* CSS-drawn simplified flags, no emoji dependency */
+.flag-us {
+  background:
+    linear-gradient(90deg, #315399 0 42%, transparent 42%),
+    repeating-linear-gradient(to bottom, #b22234 0 7.69%, #fff 7.69% 15.38%);
+}
+.flag-cn {
+  background: #de2910;
+  position: relative;
+}
+.flag-cn::before {
+  content: "★";
+  color: #ffde00;
+  position: absolute;
+  left: 3px;
+  top: -2px;
+  font-size: 9px;
+}
+.flag-th {
+  background: linear-gradient(to bottom, #a51931 0 16%, #fff 16% 32%, #2d2a4a 32% 68%, #fff 68% 84%, #a51931 84%);
+}
+.flag-la {
+  background:
+    radial-gradient(circle at 50% 50%, #fff 0 20%, transparent 21%),
+    linear-gradient(to bottom, #ce1126 0 25%, #002868 25% 75%, #ce1126 75%);
+}
+.flag-kr {
+  background:
+    radial-gradient(circle at 50% 50%, #cd2e3a 0 28%, transparent 29%),
+    linear-gradient(135deg, transparent 0 47%, #0047a0 47% 53%, transparent 53%),
+    #fff;
+}
+.flag-jp {
+  background: radial-gradient(circle at 50% 50%, #bc002d 0 31%, transparent 32%), #fff;
+}
+
+@media (max-width: 860px) {
+  .language-switch {
+    order: 2;
+    margin-left: auto;
+    max-width: none;
+  }
+
+  .lang-select-btn {
+    min-width: 86px;
+    height: 40px;
+    padding: 0 10px;
+  }
+
+  .nav-toggle {
+    order: 3;
+  }
+
+  .main-nav {
+    order: 4;
+  }
+}
+
+@media (max-width: 480px) {
+  .lang-select-btn {
+    min-width: 78px;
+    height: 38px;
+    gap: 6px;
+    padding: 0 9px;
+    font-size: .78rem;
+  }
+
+  .flag-icon {
+    width: 22px;
+    height: 15px;
+  }
+}

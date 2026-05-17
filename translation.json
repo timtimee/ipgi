@@ -4,32 +4,38 @@
     {
       "code": "en",
       "label": "EN",
-      "name": "English"
+      "name": "English",
+      "flag": "us"
     },
     {
       "code": "zh",
       "label": "CN",
-      "name": "中文"
+      "name": "中文",
+      "flag": "cn"
     },
     {
       "code": "th",
       "label": "TH",
-      "name": "ไทย"
+      "name": "ไทย",
+      "flag": "th"
     },
     {
       "code": "lo",
       "label": "LO",
-      "name": "ລາວ"
+      "name": "ລາວ",
+      "flag": "la"
     },
     {
       "code": "ko",
       "label": "KR",
-      "name": "한국어"
+      "name": "한국어",
+      "flag": "kr"
     },
     {
       "code": "ja",
       "label": "JP",
-      "name": "日本語"
+      "name": "日本語",
+      "flag": "jp"
     }
   ],
   "strings": {
@@ -111,7 +117,12 @@
           "Minimum bet requirement for a chance to win the jackpot: 10,000 THB",
           "Leaderboard ranking period: Saturday to Thursday",
           "Leaderboard rankings reset every Friday at 16:00H"
-        ]
+        ],
+        "comingTitle": "Promotion Coming Soon",
+        "comingLead": "Stay tuned for our upcoming Hydra Points Race promotion.",
+        "comingEyebrow": "Under Proposal",
+        "comingHeading": "Hydra Points Race is coming soon",
+        "comingText": "Full promotion mechanics and leaderboard details will be announced once the event is finalized."
       },
       "footer": {
         "rights": "© 2026 IPGI Laos",
@@ -196,7 +207,12 @@
           "获得彩金机会的最低投注要求：10,000 泰铢",
           "排行榜统计周期：周六至周四",
           "排行榜每周五 16:00H 重置"
-        ]
+        ],
+        "comingTitle": "促销即将推出",
+        "comingLead": "敬请期待即将推出的 Hydra Points Race 促销活动。",
+        "comingEyebrow": "提案阶段",
+        "comingHeading": "Hydra Points Race 即将推出",
+        "comingText": "活动最终确认后，将公布完整的促销规则和排行榜详情。"
       },
       "footer": {
         "rights": "© 2026 IPGI Laos",
@@ -281,7 +297,12 @@
           "ยอดเดิมพันขั้นต่ำเพื่อมีสิทธิ์ลุ้นแจ็กพอต: 10,000 บาท",
           "ช่วงจัดอันดับ Leaderboard: วันเสาร์ถึงวันพฤหัสบดี",
           "รีเซ็ตอันดับ Leaderboard ทุกวันศุกร์ เวลา 16:00H"
-        ]
+        ],
+        "comingTitle": "โปรโมชั่นเร็ว ๆ นี้",
+        "comingLead": "โปรดติดตามโปรโมชั่น Hydra Points Race ที่กำลังจะมาถึง",
+        "comingEyebrow": "อยู่ระหว่างการเสนอ",
+        "comingHeading": "Hydra Points Race กำลังจะมาเร็ว ๆ นี้",
+        "comingText": "รายละเอียดกติกาโปรโมชั่นและข้อมูล Leaderboard จะประกาศเมื่อกิจกรรมได้รับการยืนยันเรียบร้อยแล้ว"
       },
       "footer": {
         "rights": "© 2026 IPGI Laos",
@@ -366,7 +387,12 @@
           "ຍອດເດີມພັນຂັ້ນຕ່ຳເພື່ອມີສິດລຸ້ນແຈັກພັອດ: 10,000 THB",
           "ຊ່ວງຈັດອັນດັບ Leaderboard: ວັນເສົາຫາວັນພະຫັດ",
           "ຣີເຊັດອັນດັບ Leaderboard ທຸກວັນສຸກ ເວລາ 16:00H"
-        ]
+        ],
+        "comingTitle": "ໂປຣໂມຊັນກຳລັງຈະມາໃນໄວໆນີ້",
+        "comingLead": "ກະລຸນາຕິດຕາມໂປຣໂມຊັນ Hydra Points Race ທີ່ກຳລັງຈະມາ.",
+        "comingEyebrow": "ຢູ່ໃນຂັ້ນຕອນສະເໜີ",
+        "comingHeading": "Hydra Points Race ກຳລັງຈະມາໃນໄວໆນີ້",
+        "comingText": "ລາຍລະອຽດກະຕິກາໂປຣໂມຊັນ ແລະ Leaderboard ຈະປະກາດຫຼັງຈາກກິດຈະກຳຖືກຢືນຢັນແລ້ວ."
       },
       "footer": {
         "rights": "© 2026 IPGI Laos",
@@ -451,7 +477,12 @@
           "잭팟 당첨 기회를 위한 최소 베팅 요건: 10,000 THB",
           "리더보드 순위 집계 기간: 토요일부터 목요일까지",
           "리더보드 순위는 매주 금요일 16:00H에 초기화됩니다"
-        ]
+        ],
+        "comingTitle": "프로모션 곧 공개",
+        "comingLead": "곧 시작될 Hydra Points Race 프로모션을 기대해 주세요.",
+        "comingEyebrow": "제안 검토 중",
+        "comingHeading": "Hydra Points Race가 곧 시작됩니다",
+        "comingText": "이벤트가 확정되면 전체 프로모션 규칙과 리더보드 상세 내용이 안내됩니다."
       },
       "footer": {
         "rights": "© 2026 IPGI Laos",
@@ -536,7 +567,12 @@
           "ジャックポット獲得チャンスの最低ベット条件：10,000 THB",
           "リーダーボード集計期間：土曜日から木曜日",
           "リーダーボード順位は毎週金曜日 16:00H にリセット"
-        ]
+        ],
+        "comingTitle": "プロモーション近日公開",
+        "comingLead": "近日公開予定のHydra Points Raceプロモーションをお楽しみに。",
+        "comingEyebrow": "提案中",
+        "comingHeading": "Hydra Points Raceは近日公開予定です",
+        "comingText": "イベント確定後、プロモーション詳細とリーダーボード情報を発表します。"
       },
       "footer": {
         "rights": "© 2026 IPGI Laos",

@@ -80,22 +80,43 @@ async function loadTranslations() {
 function renderLanguageSwitch() {
   if (!languageSwitch) return;
 
+  const current = (translationData.languages || []).find((lang) => lang.code === currentLanguage)
+    || translationData.languages?.[0]
+    || { code: 'en', label: 'EN', name: 'English', flag: 'us' };
+
   const options = (translationData.languages || []).map((lang) => `
-    <option value="${lang.code}">${lang.flag || '🌐'} ${lang.label}</option>
+    <button type="button" class="lang-option" data-lang="${lang.code}" role="option" aria-selected="${lang.code === currentLanguage}">
+      <span class="flag-icon flag-${lang.flag || lang.code}"></span>
+      <span>${lang.label}</span>
+    </button>
   `).join('');
 
   languageSwitch.innerHTML = `
-    <label class="lang-label" for="languageSelect">🌐</label>
-    <select id="languageSelect" class="lang-select" aria-label="Select language">
+    <button type="button" class="lang-select-btn" id="languageSelectBtn" aria-haspopup="listbox" aria-expanded="false">
+      <span class="flag-icon flag-${current.flag || current.code}"></span>
+      <span>${current.label}</span>
+      <span class="lang-caret">⌄</span>
+    </button>
+    <div class="lang-menu" id="languageMenu" role="listbox">
       ${options}
-    </select>
+    </div>
   `;
 
-  const select = document.getElementById('languageSelect');
-  if (select) {
-    select.value = currentLanguage;
-    select.addEventListener('change', () => setLanguage(select.value));
-  }
+  const button = document.getElementById('languageSelectBtn');
+  const menu = document.getElementById('languageMenu');
+
+  button?.addEventListener('click', (event) => {
+    event.stopPropagation();
+    const isOpen = languageSwitch.classList.toggle('open');
+    button.setAttribute('aria-expanded', String(isOpen));
+  });
+
+  menu?.querySelectorAll('[data-lang]').forEach((item) => {
+    item.addEventListener('click', () => {
+      setLanguage(item.dataset.lang);
+      languageSwitch.classList.remove('open');
+    });
+  });
 
   updateLanguageButtons();
 }
@@ -110,8 +131,20 @@ function setLanguage(code) {
 }
 
 function updateLanguageButtons() {
-  const select = document.getElementById('languageSelect');
-  if (select) select.value = currentLanguage;
+  const selected = (translationData?.languages || []).find((lang) => lang.code === currentLanguage);
+  const btn = document.getElementById('languageSelectBtn');
+  if (btn && selected) {
+    btn.innerHTML = `
+      <span class="flag-icon flag-${selected.flag || selected.code}"></span>
+      <span>${selected.label}</span>
+      <span class="lang-caret">⌄</span>
+    `;
+  }
+
+  languageSwitch?.querySelectorAll('[data-lang]').forEach((item) => {
+    item.classList.toggle('active', item.dataset.lang === currentLanguage);
+    item.setAttribute('aria-selected', String(item.dataset.lang === currentLanguage));
+  });
 }
 
 function applyTranslations() {
@@ -327,6 +360,11 @@ navToggle.addEventListener('click', () => {
 });
 
 document.addEventListener('click', (event) => {
+  if (!event.target.closest('.language-switch')) {
+    languageSwitch?.classList.remove('open');
+    document.getElementById('languageSelectBtn')?.setAttribute('aria-expanded', 'false');
+  }
+
   const link = event.target.closest('a[href^="#"]');
   if (!link) return;
 
