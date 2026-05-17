@@ -1,16 +1,9 @@
 const CONFIG = {
   jackpotDataUrl: 'data.json',
-  // Best for browser use: GitHub Pages URL. If you use a different repo later, change only this URL.
   leaderboardUrl: 'https://ipgi-laos.github.io/stvegas/leaderboard.json',
   leaderboardFallbackUrl: 'https://raw.githubusercontent.com/ipgi-laos/stvegas/main/leaderboard.json',
   fullLeaderboardUrl: 'https://ipgi-laos.github.io/stvegas/',
   refreshMs: 60000
-};
-
-const TEMPLATES = {
-  jackpot: 'templates/jackpot.html',
-  events: 'templates/events.html',
-  promotion: 'templates/promotion.html'
 };
 
 const EVENTS = [
@@ -40,13 +33,9 @@ const EVENTS = [
   }
 ];
 
-let activeView = 'jackpot';
 let jackpotData = {};
 let jackpotMode = 'current';
-let leaderboardTimer = null;
-let jackpotTimer = null;
 
-const app = document.getElementById('app');
 const navToggle = document.getElementById('navToggle');
 const mainNav = document.getElementById('mainNav');
 
@@ -61,47 +50,6 @@ function formatGameName(key) {
 
 function setStatus(element, text) {
   if (element) element.textContent = text;
-}
-
-async function loadTemplate(name) {
-  const response = await fetch(`${TEMPLATES[name]}?v=${Date.now()}`);
-  if (!response.ok) throw new Error(`Unable to load ${TEMPLATES[name]}`);
-  return response.text();
-}
-
-async function navigate(name) {
-  activeView = name;
-  clearInterval(leaderboardTimer);
-  clearInterval(jackpotTimer);
-  leaderboardTimer = null;
-  jackpotTimer = null;
-
-  document.querySelectorAll('[data-template-link]').forEach((button) => {
-    button.classList.toggle('active', button.dataset.templateLink === name);
-  });
-
-  mainNav.classList.remove('open');
-  app.classList.add('view-fading');
-
-  try {
-    const template = await loadTemplate(name);
-
-    window.setTimeout(() => {
-      app.innerHTML = template;
-      app.classList.remove('view-fading');
-      app.classList.add('view-entering');
-      window.setTimeout(() => app.classList.remove('view-entering'), 450);
-
-      if (name === 'jackpot') initJackpotView();
-      if (name === 'events') initEventsView();
-      if (name === 'promotion') initPromotionView();
-
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 180);
-  } catch (error) {
-    app.classList.remove('view-fading');
-    app.innerHTML = `<div class="error-card">Unable to load page content.<br>${error.message}</div>`;
-  }
 }
 
 async function fetchJsonWithFallback(primaryUrl, fallbackUrl) {
@@ -128,7 +76,7 @@ async function initJackpotView() {
   });
 
   await loadJackpotData();
-  jackpotTimer = setInterval(loadJackpotData, CONFIG.refreshMs);
+  setInterval(loadJackpotData, CONFIG.refreshMs);
 }
 
 async function loadJackpotData() {
@@ -211,7 +159,7 @@ async function initPromotionView() {
   if (link) link.href = CONFIG.fullLeaderboardUrl;
 
   await loadLeaderboardPreview();
-  leaderboardTimer = setInterval(loadLeaderboardPreview, CONFIG.refreshMs);
+  setInterval(loadLeaderboardPreview, CONFIG.refreshMs);
 }
 
 async function loadLeaderboardPreview() {
@@ -242,14 +190,57 @@ async function loadLeaderboardPreview() {
   }
 }
 
+/* Menu scroll + active section */
+function scrollToSection(hash) {
+  const target = document.querySelector(hash);
+  if (!target) return;
+
+  mainNav.classList.remove('open');
+  target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function updateActiveMenu() {
+  const sections = [...document.querySelectorAll('.snap-section')];
+  const offset = window.innerHeight * 0.32;
+
+  let currentId = sections[0]?.id || 'latest-jackpot';
+  for (const section of sections) {
+    const rect = section.getBoundingClientRect();
+    if (rect.top <= offset) currentId = section.id;
+  }
+
+  document.querySelectorAll('.nav-link').forEach((link) => {
+    link.classList.toggle('active', link.getAttribute('href') === `#${currentId}`);
+  });
+}
+
+function initReveal() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) entry.target.classList.add('is-visible');
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal-card').forEach((card) => observer.observe(card));
+}
+
 navToggle.addEventListener('click', () => {
   mainNav.classList.toggle('open');
 });
 
 document.addEventListener('click', (event) => {
-  const target = event.target.closest('[data-template-link]');
-  if (!target) return;
-  navigate(target.dataset.templateLink);
+  const link = event.target.closest('a[href^="#"]');
+  if (!link) return;
+
+  event.preventDefault();
+  scrollToSection(link.getAttribute('href'));
 });
 
-navigate('jackpot');
+window.addEventListener('scroll', updateActiveMenu, { passive: true });
+window.addEventListener('resize', updateActiveMenu);
+
+initJackpotView();
+initEventsView();
+initPromotionView();
+initReveal();
+updateActiveMenu();
