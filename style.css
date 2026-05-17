@@ -805,3 +805,43 @@ h3 {
     height: 28px;
   }
 }
+
+/* v8 section header alignment patch */
+.hero-copy,
+.section-head {
+  width: 100%;
+  max-width: none;
+}
+
+.jackpot-view .hero-copy {
+  width: min(900px, 100%);
+  max-width: none;
+}
+
+.events-view .section-head,
+.promotion-view .section-head {
+  width: 100%;
+  max-width: none;
+}
+
+.events-view .event-grid,
+.promotion-view .promo-layout,
+.jackpot-view .jackpot-grid {
+  width: 100%;
+}
+
+@media (min-width: 861px) {
+  .events-view .section-head,
+  .promotion-view .section-head {
+    padding-left: clamp(28px, 4vw, 52px);
+    padding-right: clamp(28px, 4vw, 52px);
+  }
+}
+
+@media (max-width: 860px) {
+  .hero-copy,
+  .section-head,
+  .jackpot-view .hero-copy {
+    width: 100%;
+  }
+}
