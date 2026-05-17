@@ -86,14 +86,14 @@ function renderLanguageSwitch() {
 
   const options = (translationData.languages || []).map((lang) => `
     <button type="button" class="lang-option" data-lang="${lang.code}" role="option" aria-selected="${lang.code === currentLanguage}">
-      <span class="flag-icon flag-${lang.flag || lang.code}"></span>
+      <img class="flag-icon" src="images/flags/${lang.flag || lang.code}.svg" alt="" />
       <span>${lang.label}</span>
     </button>
   `).join('');
 
   languageSwitch.innerHTML = `
     <button type="button" class="lang-select-btn" id="languageSelectBtn" aria-haspopup="listbox" aria-expanded="false">
-      <span class="flag-icon flag-${current.flag || current.code}"></span>
+      <img class="flag-icon" src="images/flags/${current.flag || current.code}.svg" alt="" />
       <span>${current.label}</span>
       <span class="lang-caret">⌄</span>
     </button>
@@ -135,7 +135,7 @@ function updateLanguageButtons() {
   const btn = document.getElementById('languageSelectBtn');
   if (btn && selected) {
     btn.innerHTML = `
-      <span class="flag-icon flag-${selected.flag || selected.code}"></span>
+      <img class="flag-icon" src="images/flags/${selected.flag || selected.code}.svg" alt="" />
       <span>${selected.label}</span>
       <span class="lang-caret">⌄</span>
     `;
