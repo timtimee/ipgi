@@ -1,5 +1,6 @@
 const CONFIG = {
   jackpotDataUrl: 'data.json',
+  translationUrl: 'translation.json',
   leaderboardUrl: 'https://ipgi-laos.github.io/stvegas/leaderboard.json',
   leaderboardFallbackUrl: 'https://raw.githubusercontent.com/ipgi-laos/stvegas/main/leaderboard.json',
   fullLeaderboardUrl: 'https://ipgi-laos.github.io/stvegas/',
@@ -7,49 +8,42 @@ const CONFIG = {
 };
 
 const EVENTS = [
-  {
-    id: 'steam-bun',
-    image: 'images/steambun.webp',
-    title: 'Chinese Steam Pork Bun',
-    subtitle: 'Morning Giveaway',
-    tag: 'Free for Early Players',
-    schedule: 'Every Tuesday & Wednesday Morning',
-    time: 'Starts 09:00 AM onwards',
-    note: 'Until Supplies Last',
-    location: 'First Floor – Zone C',
-    description: 'Enjoy freshly steamed pork buns for early players. Limited quantity available.'
-  },
-  {
-    id: 'egg-tart',
-    image: 'images/eggtart.webp',
-    title: 'Egg Tart',
-    subtitle: 'Morning Giveaway',
-    tag: 'Free for Early Players',
-    schedule: 'Every Friday & Saturday Morning',
-    time: 'Starts 09:00 AM onwards',
-    note: 'Until Supplies Last',
-    location: 'First Floor – Zone C',
-    description: 'Start your day with delicious egg tarts while enjoying your favorite games.'
-  }
+  { id: 'steam-bun', image: 'images/steambun.webp' },
+  { id: 'egg-tart', image: 'images/eggtart.webp' }
 ];
 
 let jackpotData = {};
 let jackpotMode = 'current';
+let translationData = null;
+let currentLanguage = localStorage.getItem('ipgiLandingLanguage') || 'en';
+let latestLeaderboardData = null;
 
 const navToggle = document.getElementById('navToggle');
 const mainNav = document.getElementById('mainNav');
+const languageSwitch = document.getElementById('languageSwitch');
 
 function formatNumber(value) {
   const number = Number(value || 0);
   return Number.isFinite(number) ? number.toLocaleString('en-US') : '--';
 }
 
-function formatGameName(key) {
-  return key.replace(/([A-Z])/g, ' $1').replace(/^./, (s) => s.toUpperCase()).trim();
+function getByPath(object, path) {
+  return path.split('.').reduce((current, key) => current?.[key], object);
+}
+
+function t(path, fallback = '') {
+  const strings = translationData?.strings || {};
+  return getByPath(strings[currentLanguage], path)
+    ?? getByPath(strings.en, path)
+    ?? fallback;
 }
 
 function setStatus(element, text) {
   if (element) element.textContent = text;
+}
+
+function formatGameName(key) {
+  return key.replace(/([A-Z])/g, ' $1').replace(/^./, (s) => s.toUpperCase()).trim();
 }
 
 async function fetchJsonWithFallback(primaryUrl, fallbackUrl) {
@@ -63,6 +57,78 @@ async function fetchJsonWithFallback(primaryUrl, fallbackUrl) {
     if (!response.ok) throw new Error(`Fallback HTTP ${response.status}`);
     return await response.json();
   }
+}
+
+/* Translation */
+async function loadTranslations() {
+  try {
+    const response = await fetch(`${CONFIG.translationUrl}?v=${Date.now()}`, { cache: 'no-store' });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    translationData = await response.json();
+  } catch (error) {
+    console.error('Unable to load translation.json', error);
+    translationData = { defaultLanguage: 'en', languages: [{ code: 'en', label: 'EN', name: 'English' }], strings: {} };
+  }
+
+  const available = translationData.languages?.map((lang) => lang.code) || ['en'];
+  if (!available.includes(currentLanguage)) currentLanguage = translationData.defaultLanguage || 'en';
+
+  renderLanguageSwitch();
+  applyTranslations();
+}
+
+function renderLanguageSwitch() {
+  if (!languageSwitch) return;
+
+  languageSwitch.innerHTML = (translationData.languages || []).map((lang) => `
+    <button type="button" class="lang-btn" data-lang="${lang.code}" title="${lang.name}">
+      ${lang.label}
+    </button>
+  `).join('');
+
+  languageSwitch.querySelectorAll('[data-lang]').forEach((button) => {
+    button.addEventListener('click', () => setLanguage(button.dataset.lang));
+  });
+
+  updateLanguageButtons();
+}
+
+function setLanguage(code) {
+  currentLanguage = code;
+  localStorage.setItem('ipgiLandingLanguage', code);
+  applyTranslations();
+  renderJackpots();
+  initEventsView();
+  renderLeaderboardPreview(latestLeaderboardData);
+}
+
+function updateLanguageButtons() {
+  languageSwitch?.querySelectorAll('[data-lang]').forEach((button) => {
+    button.classList.toggle('active', button.dataset.lang === currentLanguage);
+  });
+}
+
+function applyTranslations() {
+  document.documentElement.lang = currentLanguage;
+
+  document.querySelectorAll('[data-i18n]').forEach((element) => {
+    const path = element.dataset.i18n;
+    const value = t(path, element.textContent);
+    if (value) element.textContent = value;
+  });
+
+  renderPromotionRules();
+  updateLanguageButtons();
+}
+
+function renderPromotionRules() {
+  const rules = document.getElementById('promotionRules');
+  if (!rules) return;
+
+  const items = t('promotions.rules', []);
+  rules.innerHTML = Array.isArray(items)
+    ? items.map((item) => `<li>${item}</li>`).join('')
+    : '';
 }
 
 /* Latest Jackpot */
@@ -85,7 +151,7 @@ async function loadJackpotData() {
     renderJackpots();
   } catch (error) {
     const grid = document.getElementById('jackpotGrid');
-    if (grid) grid.innerHTML = `<div class="error-card">Unable to load jackpot data. Please check data.json.</div>`;
+    if (grid) grid.innerHTML = `<div class="error-card">${t('jackpot.error', 'Unable to load jackpot data.')}</div>`;
   }
 }
 
@@ -97,27 +163,36 @@ function renderJackpots() {
   const entries = Object.entries(games);
 
   if (!entries.length) {
-    grid.innerHTML = '<div class="loading-card">No jackpot data available.</div>';
+    grid.innerHTML = `<div class="loading-card">${t('jackpot.noData', 'No jackpot data available.')}</div>`;
     return;
   }
 
   grid.innerHTML = entries.map(([key, game]) => {
-    const level1Date = jackpotMode === 'current' ? `Updated: ${game.time || '--:--'}` : `Date: ${game.level1_date || '--'}`;
-    const level2Date = jackpotMode === 'current' ? `Updated: ${game.time || '--:--'}` : `Date: ${game.level2_date || '--'}`;
+    const modeLabel = jackpotMode === 'current'
+      ? t('jackpot.currentLabel', 'Current Jackpot')
+      : t('jackpot.lastLabel', 'Last Jackpot Hit');
+
+    const level1Date = jackpotMode === 'current'
+      ? `${t('jackpot.updated', 'Updated')}: ${game.time || '--:--'}`
+      : `${t('jackpot.date', 'Date')}: ${game.level1_date || '--'}`;
+
+    const level2Date = jackpotMode === 'current'
+      ? `${t('jackpot.updated', 'Updated')}: ${game.time || '--:--'}`
+      : `${t('jackpot.date', 'Date')}: ${game.level2_date || '--'}`;
 
     return `
       <article class="jackpot-card reveal-card is-visible">
         <div class="card-glow"></div>
-        <p class="eyebrow compact">${jackpotMode === 'current' ? 'Current Jackpot' : 'Last Jackpot Hit'}</p>
+        <p class="eyebrow compact">${modeLabel}</p>
         <h2>${formatGameName(key)}</h2>
         <div class="level-grid">
           <div class="level-card">
-            <span class="level-label">Level 1</span>
+            <span class="level-label">${t('jackpot.level1', 'Level 1')}</span>
             <strong class="jackpot-amount">THB ${formatNumber(game.level1)}</strong>
             <small>${level1Date}</small>
           </div>
           <div class="level-card">
-            <span class="level-label">Level 2</span>
+            <span class="level-label">${t('jackpot.level2', 'Level 2')}</span>
             <strong class="jackpot-amount">THB ${formatNumber(game.level2)}</strong>
             <small>${level2Date}</small>
           </div>
@@ -132,25 +207,29 @@ function initEventsView() {
   const grid = document.getElementById('eventGrid');
   if (!grid) return;
 
-  grid.innerHTML = EVENTS.map((event) => `
-    <article class="event-card reveal-card is-visible">
-      <div class="event-image">
-        <img src="${event.image}" alt="${event.title}" loading="lazy" />
-      </div>
-      <div class="event-content">
-        <span class="gold-chip">${event.tag}</span>
-        <p class="eyebrow compact">${event.subtitle}</p>
-        <h2>${event.title}</h2>
-        <p>${event.description}</p>
-        <div class="event-details">
-          <span>${event.schedule}</span>
-          <strong>${event.time}</strong>
-          <small>${event.note}</small>
+  grid.innerHTML = EVENTS.map((event) => {
+    const base = `events.cards.${event.id}`;
+    const title = t(`${base}.title`, event.id);
+    return `
+      <article class="event-card reveal-card is-visible">
+        <div class="event-image">
+          <img src="${event.image}" alt="${title}" loading="lazy" />
         </div>
-        <div class="location-pill">${event.location}</div>
-      </div>
-    </article>
-  `).join('');
+        <div class="event-content">
+          <span class="gold-chip">${t(`${base}.tag`, '')}</span>
+          <p class="eyebrow compact">${t(`${base}.subtitle`, '')}</p>
+          <h2>${title}</h2>
+          <p>${t(`${base}.description`, '')}</p>
+          <div class="event-details">
+            <span>${t(`${base}.schedule`, '')}</span>
+            <strong>${t(`${base}.time`, '')}</strong>
+            <small>${t(`${base}.note`, '')}</small>
+          </div>
+          <div class="location-pill">${t(`${base}.location`, '')}</div>
+        </div>
+      </article>
+    `;
+  }).join('');
 }
 
 /* Promotions */
@@ -168,25 +247,38 @@ async function loadLeaderboardPreview() {
   if (!body) return;
 
   try {
-    const data = await fetchJsonWithFallback(CONFIG.leaderboardUrl, CONFIG.leaderboardFallbackUrl);
-    const rows = (data.rows || []).slice(0, 8);
-
-    setStatus(meta, `Last Updated: ${data.lastUpdated || '--'} • Showing Top 8`);
-
-    body.innerHTML = rows.map((row, index) => `
-      <tr>
-        <td><span class="rank-pill">${row.rank || index + 1}</span></td>
-        <td>${row.membership || '--'}</td>
-        <td><strong>${formatNumber(row.points)}</strong></td>
-      </tr>
-    `).join('');
-
-    if (!rows.length) {
-      body.innerHTML = '<tr><td colspan="3">No leaderboard data available.</td></tr>';
-    }
+    latestLeaderboardData = await fetchJsonWithFallback(CONFIG.leaderboardUrl, CONFIG.leaderboardFallbackUrl);
+    renderLeaderboardPreview(latestLeaderboardData);
   } catch (error) {
-    setStatus(meta, 'Unable to load Hydra leaderboard data.');
-    body.innerHTML = '<tr><td colspan="3">Please check the leaderboard JSON URL.</td></tr>';
+    setStatus(meta, t('promotions.unable', 'Unable to load Hydra leaderboard data.'));
+    body.innerHTML = `<tr><td colspan="3">${t('promotions.checkUrl', 'Please check the leaderboard JSON URL.')}</td></tr>`;
+  }
+}
+
+function renderLeaderboardPreview(data) {
+  const body = document.getElementById('promotionLeaderboardBody');
+  const meta = document.getElementById('leaderboardMeta');
+  if (!body) return;
+
+  if (!data) {
+    setStatus(meta, t('promotions.loading', 'Loading leaderboard data...'));
+    return;
+  }
+
+  const rows = (data.rows || []).slice(0, 8);
+
+  setStatus(meta, `${t('promotions.lastUpdated', 'Last Updated')}: ${data.lastUpdated || '--'} • ${t('promotions.showingTop8', 'Showing Top 8')}`);
+
+  body.innerHTML = rows.map((row, index) => `
+    <tr>
+      <td><span class="rank-pill">${row.rank || index + 1}</span></td>
+      <td>${row.membership || '--'}</td>
+      <td><strong>${formatNumber(row.points)}</strong></td>
+    </tr>
+  `).join('');
+
+  if (!rows.length) {
+    body.innerHTML = `<tr><td colspan="3">${t('promotions.noData', 'No leaderboard data available.')}</td></tr>`;
   }
 }
 
@@ -239,8 +331,11 @@ document.addEventListener('click', (event) => {
 window.addEventListener('scroll', updateActiveMenu, { passive: true });
 window.addEventListener('resize', updateActiveMenu);
 
-initJackpotView();
-initEventsView();
-initPromotionView();
-initReveal();
-updateActiveMenu();
+(async function initPage() {
+  await loadTranslations();
+  initJackpotView();
+  initEventsView();
+  initPromotionView();
+  initReveal();
+  updateActiveMenu();
+})();

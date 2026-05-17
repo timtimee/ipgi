@@ -858,3 +858,106 @@ h3 {
     padding-right: clamp(28px, 4vw, 52px);
   }
 }
+
+/* v10 translation selector */
+.language-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.66);
+  border: 1px solid var(--line);
+  box-shadow: 0 10px 28px rgba(160, 107, 0, .08);
+}
+
+.lang-btn {
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  min-width: 38px;
+  height: 34px;
+  padding: 0 9px;
+  border-radius: 999px;
+  font-weight: 900;
+  font-size: .78rem;
+  transition: transform .2s ease, background .2s ease, color .2s ease, border-color .2s ease;
+}
+
+.lang-btn:hover {
+  transform: translateY(-1px);
+  color: var(--ink);
+  border-color: rgba(217, 167, 46, .3);
+}
+
+.lang-btn.active {
+  background: linear-gradient(145deg, #ffe49f, #d7a12a);
+  color: #2b1800;
+  border-color: rgba(171, 118, 9, .38);
+}
+
+html[lang="th"] body,
+html[lang="lo"] body,
+html[lang="zh"] body,
+html[lang="ko"] body,
+html[lang="ja"] body {
+  font-family: Arial, "Noto Sans Thai", "Noto Sans Lao", "Noto Sans CJK SC", "Noto Sans KR", "Noto Sans JP", "Microsoft YaHei", "Malgun Gothic", "Yu Gothic", "Tahoma", sans-serif;
+}
+
+html[lang="th"] .eyebrow,
+html[lang="lo"] .eyebrow,
+html[lang="zh"] .eyebrow,
+html[lang="ko"] .eyebrow,
+html[lang="ja"] .eyebrow,
+html[lang="th"] .mini-table th,
+html[lang="lo"] .mini-table th,
+html[lang="zh"] .mini-table th,
+html[lang="ko"] .mini-table th,
+html[lang="ja"] .mini-table th {
+  letter-spacing: .05em;
+}
+
+@media (max-width: 860px) {
+  .language-switch {
+    order: 2;
+    margin-left: auto;
+    max-width: calc(100vw - 160px);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .language-switch::-webkit-scrollbar {
+    display: none;
+  }
+
+  .lang-btn {
+    min-width: 34px;
+    height: 32px;
+    padding: 0 8px;
+    font-size: .72rem;
+  }
+
+  .nav-toggle {
+    order: 3;
+  }
+
+  .main-nav {
+    order: 4;
+  }
+}
+
+@media (max-width: 480px) {
+  .language-switch {
+    max-width: calc(100vw - 132px);
+    gap: 3px;
+    padding: 4px;
+  }
+
+  .lang-btn {
+    min-width: 30px;
+    height: 30px;
+    padding: 0 6px;
+    font-size: .68rem;
+  }
+}
