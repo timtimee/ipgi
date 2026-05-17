@@ -709,3 +709,99 @@ h3 {
 .jackpot-grid {
   margin-top: 18px;
 }
+
+/* v5 mobile promo leaderboard fix */
+@media (max-width: 760px) {
+  .promotion-view .section-head {
+    padding: 22px 18px;
+  }
+
+  .promotion-view h1 {
+    font-size: clamp(2rem, 10vw, 3.2rem);
+  }
+
+  .promo-layout {
+    gap: 16px;
+  }
+
+  .leaderboard-preview,
+  .promo-info {
+    padding: 18px 14px;
+    border-radius: 22px;
+    overflow: hidden;
+  }
+
+  .leaderboard-meta {
+    font-size: .92rem;
+    line-height: 1.35;
+  }
+
+  .mini-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 18px;
+  }
+
+  .mini-table {
+    min-width: 0;
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  .mini-table th,
+  .mini-table td {
+    padding: 11px 6px;
+    font-size: .86rem;
+    white-space: nowrap;
+  }
+
+  .mini-table th {
+    font-size: .68rem;
+    letter-spacing: .03em;
+  }
+
+  .mini-table th:nth-child(1),
+  .mini-table td:nth-child(1) {
+    width: 23%;
+  }
+
+  .mini-table th:nth-child(2),
+  .mini-table td:nth-child(2) {
+    width: 37%;
+  }
+
+  .mini-table th:nth-child(3),
+  .mini-table td:nth-child(3) {
+    width: 40%;
+  }
+
+  .rank-pill {
+    min-width: 30px;
+    height: 30px;
+    font-size: .86rem;
+  }
+
+  .promo-info p,
+  .promo-info li {
+    overflow-wrap: anywhere;
+    word-break: normal;
+  }
+}
+
+@media (max-width: 390px) {
+  .mini-table th,
+  .mini-table td {
+    padding: 10px 4px;
+    font-size: .8rem;
+  }
+
+  .mini-table th {
+    font-size: .62rem;
+  }
+
+  .rank-pill {
+    min-width: 28px;
+    height: 28px;
+  }
+}
