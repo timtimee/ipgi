@@ -85,7 +85,7 @@ async function loadJackpotData() {
     renderJackpots();
   } catch (error) {
     const grid = document.getElementById('jackpotGrid');
-    if (grid) grid.innerHTML = `<div class="error-card">Unable to load jackpot data.</div>`;
+    if (grid) grid.innerHTML = `<div class="error-card">Unable to load jackpot data. Please check data.json.</div>`;
   }
 }
 
@@ -106,7 +106,7 @@ function renderJackpots() {
     const level2Date = jackpotMode === 'current' ? `Updated: ${game.time || '--:--'}` : `Date: ${game.level2_date || '--'}`;
 
     return `
-      <article class="jackpot-card reveal-card">
+      <article class="jackpot-card reveal-card is-visible">
         <div class="card-glow"></div>
         <p class="eyebrow compact">${jackpotMode === 'current' ? 'Current Jackpot' : 'Last Jackpot Hit'}</p>
         <h2>${formatGameName(key)}</h2>
@@ -133,7 +133,7 @@ function initEventsView() {
   if (!grid) return;
 
   grid.innerHTML = EVENTS.map((event) => `
-    <article class="event-card reveal-card">
+    <article class="event-card reveal-card is-visible">
       <div class="event-image">
         <img src="${event.image}" alt="${event.title}" loading="lazy" />
       </div>
