@@ -845,3 +845,16 @@ h3 {
     width: 100%;
   }
 }
+
+/* v9 jackpot header alignment final patch */
+.jackpot-view .hero-copy {
+  width: 100%;
+  max-width: none;
+}
+
+@media (min-width: 861px) {
+  .jackpot-view .hero-copy {
+    padding-left: clamp(28px, 4vw, 52px);
+    padding-right: clamp(28px, 4vw, 52px);
+  }
+}
