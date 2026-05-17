@@ -80,15 +80,22 @@ async function loadTranslations() {
 function renderLanguageSwitch() {
   if (!languageSwitch) return;
 
-  languageSwitch.innerHTML = (translationData.languages || []).map((lang) => `
-    <button type="button" class="lang-btn" data-lang="${lang.code}" title="${lang.name}">
-      ${lang.label}
-    </button>
+  const options = (translationData.languages || []).map((lang) => `
+    <option value="${lang.code}">${lang.flag || '🌐'} ${lang.label}</option>
   `).join('');
 
-  languageSwitch.querySelectorAll('[data-lang]').forEach((button) => {
-    button.addEventListener('click', () => setLanguage(button.dataset.lang));
-  });
+  languageSwitch.innerHTML = `
+    <label class="lang-label" for="languageSelect">🌐</label>
+    <select id="languageSelect" class="lang-select" aria-label="Select language">
+      ${options}
+    </select>
+  `;
+
+  const select = document.getElementById('languageSelect');
+  if (select) {
+    select.value = currentLanguage;
+    select.addEventListener('change', () => setLanguage(select.value));
+  }
 
   updateLanguageButtons();
 }
@@ -103,9 +110,8 @@ function setLanguage(code) {
 }
 
 function updateLanguageButtons() {
-  languageSwitch?.querySelectorAll('[data-lang]').forEach((button) => {
-    button.classList.toggle('active', button.dataset.lang === currentLanguage);
-  });
+  const select = document.getElementById('languageSelect');
+  if (select) select.value = currentLanguage;
 }
 
 function applyTranslations() {
